@@ -1,0 +1,173 @@
+{% extends 'base/base.html' %}
+{% block title %}  {% endblock %}
+{% block content %}
+
+{% load static %}
+
+{% if request.session.username %}
+    <div class="content-area-6">
+        <div class="main-title" style="margin-top: -50px; margin-bottom: 35px;" >
+            <h1>Edita tu <span>Información de Habitación</span></h1>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div style="margin-top: -15px; margin-bottom: 20px;">
+                    <h5>
+                        <a href="{% url 'roompreview' house_id roomnumber %}"><i class="bi bi-arrow-left-circle"></i></a>
+                        Volver a la Habitación
+                    </h5>
+                </div>
+                <div class="col-12 col-lg-8 col-md-12 col-xs-12">
+                    <div class="home-details-section">
+                        <!-- Inicio del encabezado -->
+                        <div class="heading-home clearfix">
+                            {% include 'includes/messages.html' %}
+                            <form action="{% url 'editroominfo' house_id roomnumber %}" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input type="text" name="houseid" id="houseid" value="{{ house_id }}" hidden>
+                                <input type="text" name="roomnumberid" id="roomnumberid" value="{{ roomnumber }}" hidden>
+                                <div class="mb-3 row">
+                                    <label for="housename" class="col-sm-2 col-form-label">Nombre de la Casa</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="housename" name="housename" value="{{ housename }}" class="form-control" aria-describedby="" disabled>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="houseaddress" class="col-sm-2 col-form-label">Dirección de la Casa</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="houseaddress" name="houseaddress" value="{{ house_address }}" class="form-control" aria-describedby="" disabled>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="roomnumber" class="col-sm-2 col-form-label">Número de Habitación</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="roomnumber" name="roomnumber" value="{{ roomnumber }}" class="form-control" aria-describedby="" disabled>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="maxcapacity" class="col-sm-2 col-form-label">Capacidad Máxima</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control search-fields" name="maxcapacity" id="maxcapacity">
+                                            <option disabled="disabled">Capacidad</option>
+                                            {% if '1' in capacity %}
+                                                <option selected="true" value="1">1</option>
+                                            {% else %}
+                                                <option value="1">1</option>
+                                            {% endif %}
+                                            {% if '2' in capacity %}
+                                                <option selected="true" value="2">2</option>
+                                            {% else %}
+                                                <option value="2">2</option>
+                                            {% endif %}
+                                            {% if '3' in capacity %}
+                                                <option selected="true" value="3">3</option>
+                                            {% else %}
+                                                <option value="3">3</option>
+                                            {% endif %}
+                                            {% if '4' in capacity %}
+                                                <option selected="true" value="4">4</option>
+                                            {% else %}
+                                                <option value="4">4</option>
+                                            {% endif %}
+                                            {% if '5' in capacity %}
+                                                <option selected="true" value="5">5</option>
+                                            {% else %}
+                                                <option value="5">5</option>
+                                            {% endif %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="roomprice" class="col-sm-2 col-form-label">Precio (En dólares)</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="roomprice" name="roomprice" value="{{ price }}" class="form-control" aria-describedby="">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="offer_pct" class="col-sm-2 col-form-label">Oferta (En porcentaje)</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="offer_pct" name="offer_pct" value="{{ offer_pct }}" class="form-control" aria-describedby="">
+                                    </div>
+                                </div>
+                                <div class="mb-3 row">
+                                    <label for="description" class="col-sm-2 col-form-label">Descripción</label>
+                                    <div class="col-sm-10">
+                                        <input type="textfield" id="description" name="description" value="{{ description }}" class="form-control" aria-describedby="">
+                                    </div>
+                                </div>
+                                <div class="d-flex m-flex">
+                                    <button class="btn button-theme btn-md btn-success" type="submit">Guardar Cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="homeDetailsSlider" class="carousel home-details-sliders slide mb-40" data-ride="carousel">                            
+                            <!-- controles de navegación del carrusel principal -->
+                            <h3 style="margin-top: 50px; margin-bottom: 30px;">Fotos de la Casa</h3>
+                            <div class="carousel-indicators-section clearfix" style="display: table-cell;">
+                                <ul class="carousel-indicators home-properties list-inline nav nav-justified edithomepicshow">
+                                    {% for photo in photos_url %}
+                                        <li class="list-inline-item" style="width:100%; display: inline-flex; vertical-align: middle; align-items: center;">
+                                            <label for="carousel-selector-{{ forloop.counter0 }}" class="col-form-label" style="font-weight: 600;">Fotos de la Habitación {{ forloop.counter }}:  </label>
+                                            <a name="carousel-selector-{{ forloop.counter0 }}" href="{{ photo }}" id="carousel-selector-{{ forloop.counter0 }}" data-slide-to="{{ forloop.counter0 }}" data-target="#homeDetailsSlider" class="simg">
+                                                <img src="{{ photo }}" class="img-fluid editimg" alt="small-home" style="margin-left: 20px; box-shadow: 0 1px 20px 0 rgba(0, 0, 0, 0.5); margin-bottom: 25px; height: 40%; width: 40%;max-width: 350px; max-height: 350px;">
+                                            </a>
+                                            <form action="{% url 'editroominfo' house_id roomnumber %}" method="POST" enctype="multipart/form-data" style=" margin-left: auto; margin-right: 0;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta imagen? No podrás deshacer esta acción.')">
+                                                {% csrf_token %}
+                                                <input type="text" value="{{ photo }}" name="deletedImg" hidden>
+                                                <button value="{{ photo }}" class="btn btn-block btn-lg btn-theme btn-danger"  style="width: 125%; padding: 0px; font-size: 1.15rem; text-align: center;">Eliminar</button>
+                                            </form>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>            
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4 col-md-12">
+                    <div class="sidebar-right">
+                        <form action="{% url 'editroominfo' house_id roomnumber %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="widget advanced-search d-none-992" style="display: grid;">
+                                <h3 class="sidebar-title">Características</h3>
+                                {% if sfeatures is None %}
+                                    {% for feature in features %}
+                                        <label class="checkbox" for="{{ feature }}" style="font-size: 18px">
+                                            <input class="checkbox_input" type="checkbox" name="{{ feature }}" id="{{ feature }}">
+                                            <div class="checkbox_box"></div>
+                                            {{ feature }}
+                                        </label>
+                                    {% endfor %}
+                                {% else %}
+                                    {% for feature in features %}
+                                        {% if feature in sfeatures %}
+                                            <label class="checkbox" for="{{ feature }}" style="font-size: 18px">
+                                                <input checked class="checkbox_input" type="checkbox" name="{{ feature }}" id="{{ feature }}">
+                                                <div class="checkbox_box"></div>
+                                                {{ feature }}
+                                            </label>
+                                        {% else %}
+                                            <label class="checkbox" for="{{ feature }}" style="font-size: 18px">
+                                                <input class="checkbox_input" type="checkbox" name="{{ feature }}" id="{{ feature }}">
+                                                <div class="checkbox_box"></div>
+                                                {{ feature }}
+                                            </label>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                <div class="d-flex n-flex">
+                                    <button class="btn button-theme btn-md btn-success" type="submit">Guardar Características</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% else %}
+    <div class="row justify-content-center">
+        <h3>¡Debes iniciar sesión para editar tu habitación!</h3>
+    </div>
+{% endif %}
+{% endblock %}

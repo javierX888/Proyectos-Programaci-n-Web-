@@ -1,0 +1,104 @@
+{% extends 'base/base.html' %}
+
+{% block title %} Renta Chile {% endblock %}
+{% block content %}
+{% load static %}
+    <div class="cont">
+        <div class="background-container">
+            <img src="{% static 'img/home-cover.jpg' %}">
+            <div class="intro">
+                <h1>¿Ir de viaje?</h1>
+                <a href="#dummy" class="btn btn-outline-light btn-link-search">Rentas Chile</a>
+            </div>
+        </div>
+    </div>
+    <div id="dummy" style="height: 5rem; background-color: #212529"></div>
+    <div id="search" class="container-lg" style="margin-bottom: 20px;">
+        {% include 'includes/messages.html' %}
+        <div  class="input-group col-12 col-lg-8 p-2 start-50 translate-middle-x">
+            <span class="input-group-text round-search-icon" id="basic-addon1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"></path>
+                </svg>
+            </span>
+            <input type="search" id="search" class="search-bar form-control" placeholder="¿Dónde ir?" aria-label="Input group example" aria-describedby="basic-addon1" spellcheck="false" data-ms-editor="true" houses-search>
+        </div>
+        <div class="row g-3 justify-content-center" house-cards-container>
+            <template house-card-template>
+                <div class="p-2 col-12 col-md-4 col-lg-3">
+                    <div class="card house-card">
+                        <div class="bg-image">
+                            <div id="" class="carousel slide carousel-fade" data-interval="false" carousel-slide>
+                                <div class="carousel-indicators" indicators-container>
+                                    <template indicator-template>
+                                        <button type="button" data-bs-target="" data-bs-slide-to="" class="" aria-current="" aria-label="" indicator-button></button>
+                                    </template>
+                                </div>
+                                <div class="carousel-inner carousel-height-15" card-image-container>
+                                    <template house-image-template>
+                                        <div class="carousel-item house-card-carousel">
+                                            <img class="d-block w-100 img-fluid" alt="foto de la casa" house-image>
+                                        </div>
+                                    </template>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Anterior</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Siguiente</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" card-body>
+                            <div class="card-title d-flex justify-content-between">
+                                <h6 house-name></h6>
+                                <span price-range></span>
+                            </div>
+                            
+                            <small class="card-text" house-address></small>
+                        </div>
+                    </div>
+                </div> 
+            </template>
+        </div>
+    </div>
+
+<!-- Nuestro equipo inicio -->
+<div class="our-team content-area bg-grea-3">
+    <div class="container">
+        <!-- Título principal -->
+        <div class="main-title">
+            <h1>Equipo <span>Ejecutivo</span></h1>
+        </div>
+        <!-- Inicio del área del control deslizante -->
+        <div class="slick-slider-area clearfix">
+            <div class="row slick-carousel" data-slick='{"slidesToShow": 1, "slidesToScroll": 1, "centerMode": true, "centerPadding": "0px"}'>
+                <div class="slick-slide-item">
+                    <div class="team-1">
+                        <div class="photo">
+                            <a href="#">
+                                <img src="{% static 'img/avatar/avatar-1.jpg' %}" alt="Javier Gacitúa" class="img-fluid team-img">
+                            </a>
+                            <div class="social-list clearfix">
+                                <a href="https://www.linkedin.com/in/javier-gacit%C3%BAa-97266117b/" class="linkedin-bg"><i class="fab fa-linkedin"></i></a>
+                                <a href="https://github.com/javierX888" class="twitter-bg"><i class="fab fa-github"></i></a>
+                                <a href="https://www.instagram.com/print_javier/" class="google-bg"><i class="fab fa-instagram"></i></a>
+                            </div>
+                        </div>
+                        <div class="details">
+                            <h4>Javier Gacitúa</h4>
+                            <h5>Gerente y Desarrollador Web</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Nuestro equipo fin -->
+{% endblock %}
+{% block includejs %}
+    <script src="{% static 'js/homescript.js' %}" defer></script>
+{% endblock includejs %}

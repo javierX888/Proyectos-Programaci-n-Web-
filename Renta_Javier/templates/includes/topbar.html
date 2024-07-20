@@ -1,0 +1,34 @@
+<!-- Inicio del encabezado superior -->
+<header class="top-header th-2 top-header-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-7">
+                <div class="list-inline">
+                    <a href="tel:+01234567899"><i class="fa fa-phone"></i>+55-4XX-634-7071</a>
+                    <a href="tel:info@gmail.com"><i class="fa fa-envelope"></i>info@gmail.com</a>
+                    <a href="tel:info@gmail.com"><i class="fa fa-clock-o"></i>Lun - Dom: 8:00am - 6:00pm</a>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-5">
+                <ul class="top-social-media pull-right">
+                    {% if request.session.username %}
+                    <li>
+                        <a href="{% url 'profile' %}"><i class="fa fa-user"></i> {{ request.session.username }}</a>
+                    </li>
+                    <li>
+                        <a href={% url 'logout' %}> Cerrar sesión</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="{% url 'signin' %}" class="sign-in"><i class="fa fa-sign-in"></i> Iniciar sesión</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'signup' %}" class="sign-in"><i class="fa fa-user"></i> Registrarse</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Fin del encabezado superior -->

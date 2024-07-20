@@ -1,0 +1,55 @@
+version: '4'
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ..:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - ORACLE_HOST=oracledatabase19c
+      - ORACLE_PORT=1521 # Este es el puerto dentro del contenedor de Oracle
+      - ORACLE_SID=ORCLCDB
+      - ORACLE_USER=system
+      - ORACLE_PASSWORD=12345
+      # - ORACLE_PDB: ORCLPDB1
+      # - ORACLE_CHARACTERSET: AL32UTF8
+      # - ORACLE_NCHARACTERSET: AL16UTF16
+      # - ORACLE_EDITION: enterprise
+    networks:
+      - renta_javier_network
+    depends_on:
+      - oracledatabase19c
+    network_mode: "container:oracledatabase19c"
+
+  oracledatabase19c:
+    image: doctorkirk/oracle-19c
+    ports:
+      - "1522:1521"
+      - "5500:5500"
+    volumes:
+      - C:\oracle-19c\oradata:/opt/oracle/oradata
+    networks:
+      - renta_javier_network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  renta_javier_network:
+    name: renta_javier_network
+    external: false
+
+
+      
+
+
+
+
+
+

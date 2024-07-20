@@ -1,0 +1,182 @@
+{% extends 'base/base.html' %}
+{% block title %}  {% endblock %}
+{% block content %}
+
+{% load static %}
+{% load humanize %}
+
+{% if request.session.username %}
+<!-- Inicio de la página de detalles de la casa -->
+    <div class="content-area-6">
+        <div class="container">
+            <div class="row">
+                <div>
+                    <h5>
+                        <a href="{% url 'yourhouses' %}"><i class="bi bi-arrow-left-circle"></i></a>
+                        Volver a Tus Casas
+                    </h5>
+                </div>
+                <div class="col-lg-8 col-md-12 col-xs-12">
+                    <div class="home-details-section">
+                        <!-- Inicio del encabezado -->
+                        <div class="heading-home clearfix">
+                            {% include 'includes/messages.html' %}
+                            <div class="pull-left">
+                                <input type="text" name="houseid" id="houseid" value="{{ house_id }}" hidden>
+                                <h3>{{ housename }}</h3>
+                                <h6>
+                                    <i class="fa fa-map-marker"></i> {{ house_address }}
+                                </h6>
+                            </div>
+                            <div class="pull-right">
+                                {% if minprice is None or maxprice is None%}
+                                {% else %}
+                                    {% if minprice == maxprice %}
+                                        <h3><span>${{ minprice | intcomma }}</span></h3>
+                                    {% else %}
+                                        <h3><span>${{ minprice | intcomma }}-${{ maxprice | intcomma }}</span></h3>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div id="homeDetailsSlider" class="carousel home-details-sliders slide mb-40" data-ride="carousel">
+                            <!-- elementos principales del carrusel -->
+                            <div class="carousel-inner">
+                                {% for photo in photos_url %}
+                                    {% if forloop.first %}
+                                        <div class="active item carousel-item" data-slide-number="{{ forloop.counter0 }}">
+                                            <center><img src="{{ photo }}" class="img-fluid" alt="slider-home"></center>
+                                        </div>
+                                    {% else %}
+                                        <div class="item carousel-item" data-slide-number="{{ forloop.counter0 }}">
+                                            <center><img src="{{ photo }}" class="img-fluid" alt="slider-home"></center>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <!-- controles de navegación del carrusel principal -->
+                            <div class="carousel-indicators-section clearfix">
+                                <ul class="carousel-indicators home-properties list-inline nav nav-justified">
+                                    {% for photo in photos_url %}
+                                        {% if forloop.first %}
+                                            <li class="list-inline-item active">
+                                                <a id="carousel-selector-{{ forloop.counter0 }}" class="selected" data-slide-to="{{ forloop.counter0 }}" data-target="#homeDetailsSlider">
+                                                    <img src="{{ photo }}" class="img-fluid" alt="small-home">
+                                                </a>
+                                            </li>
+                                        {% else %}
+                                            <li class="list-inline-item">
+                                                <a id="carousel-selector-{{ forloop.counter0 }}" data-slide-to="{{ forloop.counter0 }}" data-target="#homeDetailsSlider">
+                                                    <img src="{{ photo }}" class="img-fluid" alt="small-home">
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <a href="#homeDetailsSlider" class="carousel-control-prev" role="button" data-slide="prev">
+                                <span class="sr-only">Anterior</span>
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            </a>
+                            <a href="#homeDetailsSlider" class="carousel-control-next" role="button" data-slide="next">
+                                <span class="sr-only">Siguiente</span>
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            </a>
+                        </div>
+                        
+                        <!-- Inicio de la caja de pestañas -->
+                        <div class="tabbing tabbing-box mb-40">
+                            <ul class="nav nav-tabs" id="homeTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active show" id="one-tab" data-toggle="tab" href="#one" role="tab" aria-controls="one" aria-selected="false" style="color: #212121;">Vista general de la casa</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="two-tab" data-toggle="tab" href="#two" role="tab" aria-controls="two" aria-selected="false" style="color: #212121;">Características</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="homeTabContent">
+                                <div class="tab-pane fade active show" id="one" role="tabpanel" aria-labelledby="one-tab">
+                                    <div class="home-description mb-50">
+                                        <h3 class="heading-2">
+                                            Descripción
+                                        </h3>
+                                        <p>
+                                            {{ description }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="two" role="tabpanel" aria-labelledby="two-tab">
+                                    <div class="features-info mb-50">
+                                        <h3 class="heading-2">Características</h3>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                                {% if features is None %}
+                                                    <h5>No hay características para previsualizar</h5>
+                                                {% else %}
+                                                    <ul>
+                                                        {% for feature in features %}
+                                                            <li>
+                                                                <span>{{ feature }}</span>
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="sidebar-right">
+                        <!-- Inicio de búsqueda avanzada -->
+                        <div class="widget advanced-search d-none-992">
+                            <form action="{% url 'yourhouses' %}" method="post" id="udform">
+                                {% csrf_token %}
+                                <button class="btn btn-outline-danger bomd btn-block btn-lg" data-toggle="modal" style="margin-bottom: 15px;"
+                                 type="submit" value="submit" onclick="onUDClickHouse('Eliminar Casa','¿Estás seguro de que quieres eliminar esta casa? ¡No puedes deshacer esta acción!','{{csrf_token}}','delhouse','/accounts/homepreview/{{house_id}}/','{{house_id}}')">Eliminar Esta Casa</button>
+                             </form>
+                            <form action="{% url 'edithouseinfo' house_id %}" style="margin-bottom: 15px;"">
+                                <button class="btn btn-outline-success bomd btn-block btn-lg" data-toggle="modal" type="submit"">Editar Información de la Casa</button>
+                            </form>
+                            <button class="btn btn-outline-success bomd btn-block btn-lg" data-toggle="modal" type="submit" id="addHousePicBtn">Añadir Foto de la Casa</button>
+                        </div>
+                        <form action="{% url 'homepreview' house_id %}" method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div id="addHousePic">
+
+                            </div>
+                            <h4 style="width:100%; text-align: center; display:none; color: #198754;" id="picLimit">¡Has alcanzado el límite de fotos!</h4>
+                            <button class="btn btn-block btn-lg btn-theme btn-success"  style="width: 25%; height:50px; margin: auto; display: none;" id="addBtnHouse">Añadir</button>
+                        </form>   
+                    </div>
+                    <div class="sidebar-right">
+                        <!-- Inicio de búsqueda avanzada -->
+                        <div class="widget advanced-search d-none-992">
+                            <form action="{% url 'addroom' house_id %}">
+                                {% csrf_token %}
+                                <button class="btn btn-outline-success bomd btn-block btn-lg" data-toggle="modal" data-target="#inquiryModal" id="addRoomBtn">Añadir Habitación</button>
+                            </form>
+                            <br><br>
+                            <h3 class="sidebar-title">Tus Habitaciones</h3>
+                            <ul>
+                                {% for room in rooms %}
+                                    <li>
+                                        <a href="{% url 'roompreview' house_id room %}"><span>Habitación No:</span>{{ room }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="row justify-content-center">
+        <h3>¡Debes iniciar sesión para previsualizar una casa!</h3>
+    </div>
+{% endif %}
+{% endblock %}

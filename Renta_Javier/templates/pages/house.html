@@ -1,0 +1,255 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Casa | {{ house.HOUSE_NAME }}
+{% endblock title %}
+
+{% block content %}
+    {% include 'includes/messages.html' %}
+    <div class="container-lg">
+        <div class="container-fluid p-2">
+            <div>
+                <h3>{{ house.HOUSE_NAME }} Alojada por {{ house.FIRST_NAME }} {{ house.LAST_NAME }}</h3>
+                <p>
+                    <i class="fa fa-map-marker"></i> 
+                    {{ house.HOUSE_NO }}, {{ house.STREET }}, {{ house.CITY_NAME }}, {{ house.STATE_NAME }}, {{ house.COUNTRY_NAME }}
+                </p>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-12 col-md-8 col-lg-8">
+                <div id="houseCarousel" class="carousel slide carousel-fade" data-interval="false" carousel-slide>
+                    <div class="carousel-indicators">
+                        {% for photo in photos_url %}
+                            {% if forloop.first %}
+                                <button type="button" data-bs-target="#houseCarousel" data-bs-slide-to="{{ forloop.counter0 }}" class="active" aria-current="" aria-label="" indicator-button></button>
+                            {% else %}
+                                <button type="button" data-bs-target="#houseCarousel" data-bs-slide-to="{{ forloop.counter0 }}"aria-current="" aria-label="" indicator-button></button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="carousel-inner house-photo-container">
+                        {% for photo in photos_url %}
+                            {% if forloop.first %}
+                                <div class="carousel-item active">
+                                    <img src="{{ photo.PATH }}" class="d-block w-100 img-fluid" alt="foto de la casa">
+                                </div>
+                            {% else %}
+                                <div class="carousel-item">
+                                    <img src="{{ photo.PATH }}" class="d-block w-100 img-fluid" alt="foto de la casa">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#houseCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#houseCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Siguiente</span>
+                    </button>
+                </div>
+                
+                <div class="clearfix">
+                    <div class="pull-left">
+                        <h5 class="pull-left">{{ house.HOUSE_NAME }} alojada por {{ house.FIRST_NAME }} {{ house.LAST_NAME }}</h5>
+                        <br>
+                        <small><i class="bi bi-star-fill"></i> {{ house.AVG_HOUSE_RATING }} <span class="middot"><span> {{ house.TOTAL_HOUSE_REVIEWS }}
+                            <a href="#reviews"> Reseñas</a>
+                        </small>
+                    </div>
+                    <div class="pull-right">
+                        <a href="#ownerInfo">
+                            {% if house.PROFILE_PIC %}
+                                <div class="house-owner-profile-pic-container">
+                                    <img src="{{ house.PROFILE_PIC }}">
+                                </div>
+                            {% else %}
+                                <div class="house-owner-profile-pic-container">
+                                    <img src="{% static 'img/profile_pic_thumbnail.png' %}">
+                                </div>
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+                <hr>
+                <div>
+                    <h4>Descripción</h4>
+                    <p>{{ house.DESCRIPTION }}
+                </div>
+                <hr>
+                <div>
+                    <h4>Lo que ofrece este lugar</h4>
+                    <div class="row">
+                        <div class="col-6 mb-1">
+                            <img class="features-icon" src='{% static 'img/icons/kitchen_black_24dp.svg' %}'/>
+                            {% if "Kitchen" in house.HOUSE_FEATURES %}
+                                <span>Cocina</span>
+                            {% else %}
+                                <span style="text-decoration: line-through;">Cocina</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-6 mb-1">
+                            <img class="features-icon" src='{% static 'img/icons/garage_black_24dp.svg' %}'/>
+                            {% if "Free Parking" in house.HOUSE_FEATURES %}
+                                <span>Estacionamiento gratuito</span>
+                            {% else %}
+                                <span style="text-decoration: line-through;">Estacionamiento gratuito</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-6 mb-1">
+                            <img class="features-icon" src='{% static 'img/icons/wifi_black_24dp.svg' %}'/>
+                            {% if "WiFi" in house.HOUSE_FEATURES %}
+                                <span>WiFi</span>
+                            {% else %}
+                                <span style="text-decoration: line-through;">WiFi</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-6">
+                            <img class="features-icon" src='{% static 'img/icons/local_laundry_service_black_24dp.svg' %}'/>
+                            {% if "Dryer" in house.HOUSE_FEATURES and "Washer" in house.HOUSE_FEATURES %}
+                                <span>Lavandería</span>
+                            {% else %}
+                                <span style="text-decoration: line-through;">Lavandería</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-6 mb-1">
+                            <img class="features-icon" src='{% static 'img/icons/pets_black_24dp.svg' %}'/>                            
+                            {% if "Pets Allowed" in house.HOUSE_FEATURES %}
+                                <span>Se permiten mascotas</span>
+                            {% else %}
+                                <span style="text-decoration: line-through;">Se permiten mascotas</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-6 mb-1">
+                            <img class="features-icon" src='{% static 'img/icons/refrigerator_black_24dp.svg' %}'/>                        
+                            {% if "Refrigerator"  in house.HOUSE_FEATURES %}
+                                <span>Refrigerador</span>
+                            {% else %}
+                                <span style="text-decoration: line-through;">Refrigerador</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-6 mb-1">
+                            <img class="features-icon" src='{% static 'img/icons/microwave_black_24dp.svg' %}'/>
+                            {% if house.HOUSE_FEATURES.12 %}
+                                <span>Horno microondas</span>
+                            {% else %}
+                                <span style="text-decoration: line-through;">Horno microondas</span>
+                            {% endif %}
+                        </div>
+                        <div class="col-6 mb-1">
+                            <img class="features-icon" src='{% static 'img/icons/tungsten_black_24dp.svg' %}'/>
+                            {% if "24/7 Electricity" in house.HOUSE_FEATURES %}
+                                <span>Electricidad 24/7</span>
+                            {% else %}
+                                <span style="text-decoration: line-through;">Electricidad 24/7</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="p-2">
+                        <h5><i class="bi bi-star-fill"></i> {{ house.AVG_HOUSE_RATING }} <span class="middot"><span> {{ house.TOTAL_HOUSE_REVIEWS }} Reseñas</h5>
+                    </div>
+                    <div id="reviews" class="row">
+                        {% for review in reviews %}
+                            <div class="col-6">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="house-owner-profile-pic-container flex-shrink-0">
+                                        {% if review.PROFILE_PIC %}
+                                            <img src="{{ review.PROFILE_PIC }}">
+                                        {% else %}
+                                            <img src="{% static 'img/profile_pic_thumbnail.png' %}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="flex-grow-1 ms-3"><b>{{ review.FIRST_NAME }}</b><br>
+                                        <small class="text-muted">{{ review.REVIEW_DATE | date:"d M, Y" }}</small>
+                                    </div> 
+                                    <small>
+                                        <i class="bi bi-star-fill"></i> {{ review.HOUSE_RATING }}
+                                    </small>
+                                </div>
+                                <p>
+                                    {{ review.HOUSE_REVIEW }}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <hr>
+                    <div id="ownerInfo">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="house-owner-profile-pic-container flex-shrink-0">
+                                {% if house.PROFILE_PIC %}
+                                    <img src="{{ house.PROFILE_PIC }}">
+                                {% else %}
+                                    <img src="{% static 'img/profile_pic_thumbnail.png' %}">                                
+                                {% endif %}
+                            </div>
+                            <div class="flex-grow-1 ms-3"><b> Alojado por {{ house.FIRST_NAME }} {{ house.LAST_NAME }}</b><br>
+                                <small class="text-muted">Se unió en {{ house.JOIN_DATE | date:"d M, Y" }}</small>
+                            </div>    
+                            <small>
+                                <i class="bi bi-star-fill"></i> {{ owner_rating.AVG_OWNER_RATING }} <span class="middot"><span> {{ owner_rating.TOTAL_OWNER_RATING }} Reseñas
+                            </small>                        
+                        </div>
+                        <div>
+                            <p><b>Número de teléfono:</b> {{ house.PHONE_NO }}</p>
+                            <p><b>Correo electrónico:</b> {{ house.EMAIL }}</p>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4 col-lg-4">
+                <div id="rooms-card" class="card room-card">
+                    <div class="card-header bg-dark text-white">
+                        <p class="text-center">Verificar disponibilidad de habitaciones</p>
+                        <div  class="input-group-container clearfix mb-1">
+                            <div id="datepickerDiv" class="input-group">
+                                <input type="text" id="checkIn" class="form-control" placeholder="Entrada">
+                                <input type="text" id="checkOut" class="form-control" placeholder="Salida">
+                            </div>
+                            <div class="input-group">
+                                <input id="guestsInput" class="text-center form-control guests-input" type="text" placeholder="Huéspedes"></input>
+                            </div>
+                        </div>
+                        <button id="room-search-btn" class="btn btn-success btn-block room-search-btn">Buscar habitaciones</button>
+                    </div>
+                    <div class="text-center hide" style="padding: 1rem 0 1rem 0;" no-room>No hay habitaciones disponibles</div>
+                    <ul id="rooms" class="list-group list-group-flush">
+                        <div id="info" data-house-id="{{ house.HOUSE_ID }}"></div>
+                        <div room-minicard-container>
+                            <template room-minicard-template>
+                                <li class="list-group-item" data-room-no="" room-minicard>
+                                    <div class="clearfix">
+                                        <div class="pull-left">
+                                            <h6 room-no>Habitación No {{ room.ROOM_NO }}</h6>
+                                            <p guests></p>
+                                        </div>
+                                        <div class="pull-right">
+                                            <div class="d-flex">
+                                                <h6 room-price></h6>
+                                                <p>/noche</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-success btn-block btn-reserve" data-room-no="" reservation-button>Reservar</button>
+                                </li>
+                            </template>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+{% endblock content %}
+
+{% block includejs %}
+    <script src="{% static 'js/reservation.js' %}"></script>
+{% endblock includejs %}
