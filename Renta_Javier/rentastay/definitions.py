@@ -1,4 +1,6 @@
 from django.db import connection
+from typing import List, Dict, Any
+from django.db.backends.utils import CursorWrapper
 
 # dictfetchall converts cursor array based output to dict
 def dictfetchall(cursor):

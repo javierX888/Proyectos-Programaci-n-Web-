@@ -1,90 +1,87 @@
 {% extends 'base/base.html' %}
-
-{% block title %}
-    Añadir Casa | {{ request.session.username }}
-{% endblock title %}
-
+{% block title %} Añadir Propiedad | {{ request.session.username }} {% endblock title %}
 {% block content %}
-    {% if request.session.username %}
-        <div class="container">
-            <div class="row justify-content-center">
-                <h1 class="text-center" style="margin-top: 15px;margin-bottom: 18px;">Añadir Casa</h1>
-                <form style="max-width:70%" action="{% url 'addhome' %}" method="POST" enctype="multipart/form-data" onsubmit="return confirm('¿Estás seguro de que toda tu información es correcta? Si es así, haz clic en aceptar.')">
-                    {% csrf_token %}
-                    {% include 'includes/messages.html' %}
-                    <div class="mb-3 row">
-                        <label for="countryname" class="col-sm-2 col-form-label">Nombre del País</label>
-                        <div class="col-sm-10">
-                            <select class="form-control search-fields" name="countryname" id="countryname">
-                                <option selected="true" disabled="disabled">Nombre del País</option>
-                                {%for country in countries %}
-                                    <option value="{{ country }}">{{ country }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="statename" class="col-sm-2 col-form-label">Nombre del Estado</label>
-                        <div class="col-sm-10">
-                            <select class="form-control search-fields" name="statename" id="statename">
-                                <option selected="true" disabled="disabled">Nombre del Estado</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="cityname" class="col-sm-2 col-form-label">Nombre de la Ciudad</label>
-                        <div class="col-sm-10">
-                            <select class="form-control search-fields" name="cityname" id="cityname">
-                                <option selected="true" disabled="disabled">Nombre de la Ciudad</option>
-                            </select>
-                        </div>
-                    </div>
+{% if request.session.username %}
+<div class="container">
+    <div class="row justify-content-center">
+        <h1 class="text-center" style="margin-top: 15px;margin-bottom: 18px;">Añadir Propiedad</h1>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include 'includes/messages.html' %}
 
-                    <div class="mb-3 row">
-                        <label for="streetname" class="col-sm-2 col-form-label">Calle</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="streetname" name="streetname" value="{{ streetname }}" class="form-control" aria-describedby="">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="postalcode" class="col-sm-2 col-form-label">Código Postal</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="postalcode" name="postalcode" value="{{ postalcode }}" class="form-control" aria-describedby="">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="housename" class="col-sm-2 col-form-label">Nombre de la Casa</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="housename" name="housename" value="{{ housename }}" class="form-control" aria-describedby="">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="housenumber" class="col-sm-2 col-form-label">Número de Casa</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="housenumber" name="housenumber" value="{{ housenumber }}" class="form-control" aria-describedby="">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="description" class="col-sm-2 col-form-label">Descripción</label>
-                        <div class="col-sm-10">
-                            <input type="textfield" id="description" name="description" value="{{ description }}" class="form-control" aria-describedby="">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="upload1" class="col-sm-2 col-form-label">Foto de la Casa:</label>
-                        <div class="col-sm-10">
-                            <input type="file" name="upload1" accept="image/*">
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <button class="btn button-theme btn-md btn-success" type="submit" style="margin-left: 50%;">Añadir Casa</button>
-                    </div>
-                </form>
+            <div class="mb-3 row">
+                <label for="countrySelect" class="col-sm-2 col-form-label">Región</label>
+                <div class="col-sm-10">
+                    <select class="form-select" id="countrySelect" name="countryname" required>
+                        <option selected disabled>Selecciona una región</option>
+                        {% for region in regions %}
+                            <option value="{{ region }}">{{ region }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
-        </div>
-    {% else %}
-        <div class="row justify-content-center">
-            <h3>¡Debes iniciar sesión para convertirte en anfitrión!</h3>
-        </div>
-    {% endif %}
+
+            <div class="mb-3 row">
+                <label for="citySelect" class="col-sm-2 col-form-label">Comuna</label>
+                <div class="col-sm-10">
+                    <select class="form-select" id="citySelect" name="cityname" required>
+                        <option selected disabled>Selecciona una comuna</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="inputStreet" class="col-sm-2 col-form-label">Calle</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputStreet" name="streetname" required>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="inputPostalCode" class="col-sm-2 col-form-label">Código Postal</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputPostalCode" name="postalcode" required>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="inputHouseName" class="col-sm-2 col-form-label">Nombre de la Propiedad</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputHouseName" name="housename" required>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="inputHouseNumber" class="col-sm-2 col-form-label">Número de Propiedad</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputHouseNumber" name="housenumber" required>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="inputDescription" class="col-sm-2 col-form-label">Descripción</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="inputDescription" name="description" rows="3" required></textarea>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="inputHousePhoto" class="col-sm-2 col-form-label">Foto de la Propiedad:</label>
+                <div class="col-sm-10">
+                    <input type="file" class="form-control" id="inputHousePhoto" name="upload1" accept="image/*" required>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary">Añadir Propiedad</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% else %}
+<div class="row justify-content-center">
+    <h3>¡Debes iniciar sesión para convertirte en anfitrión!</h3>
+</div>
+{% endif %}
 {% endblock content %}

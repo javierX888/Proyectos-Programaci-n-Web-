@@ -1,73 +1,74 @@
 {% extends 'base/base.html' %}
-
-{% block title %}
-    Añadir Habitación | {{ request.session.username }}
-{% endblock title %}
-
+{% block title %} Añadir Habitación | {{ request.session.username }} {% endblock title %}
 {% block content %}
-    {% if request.session.username %}
-        <div class="container">
-            <div class="row justify-content-center">
-                <h1 class="text-center">Añadir Habitación</h1>
-                <form action="{% url 'addroom' house_id %}" method="POST" enctype="multipart/form-data" onsubmit="return confirm('¿Estás seguro de que toda tu información es correcta? Si es así, haz clic en aceptar.')">
-                    {% csrf_token %}
-                    
-                    {% include 'includes/messages.html' %}
-                    <input type="text" name="houseid" id="houseid" value="{{ house_id }}" hidden>
-                    <div class="mb-3 row">
-                        <label for="roomhousename" class="col-sm-2 col-form-label">Nombre de la Casa</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="roomhousename" name="roomhousename" value="{{ housename }}" class="form-control" aria-describedby="" disabled>
-                        </div>
-                    </div>
+{% if request.session.username %}
+<div class="container">
+    <div class="row justify-content-center">
+        <h1 class="text-center">Añadir Habitación</h1>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% include 'includes/messages.html' %}
 
-                    <div class="mb-3 row">
-                        <label for="roomnumber" class="col-sm-2 col-form-label">Número de Habitación</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="roomnumber" name="roomnumber" value="{{ roomnumber }}" class="form-control" aria-describedby="">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="maxcapacity" class="col-sm-2 col-form-label">Capacidad Máxima</label>
-                        <div class="col-sm-10">
-                            <select class="form-control search-fields" name="maxcapacity" id="maxcapacity">
-                                <option selected="true" disabled="disabled">Capacidad</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
-                                <option value="5">5</option>
-                                <option value="6">6</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="description" class="col-sm-2 col-form-label">Descripción</label>
-                        <div class="col-sm-10">
-                            <input type="textfield" id="description" name="description" value="{{ description }}" class="form-control" aria-describedby="">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="roomprice" class="col-sm-2 col-form-label">Precio (En dólares)</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="roomprice" name="roomprice" value="{{ roomprice }}" class="form-control" aria-describedby="">
-                        </div>
-                    </div>
-                    <div class="mb-3 row">
-                        <label for="uploadroom1" class="col-sm-2 col-form-label">Foto de la Habitación:</label>
-                        <div class="col-sm-10">
-                            <input type="file" name="uploadroom1" accept="image/*">
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <button class="btn button-theme btn-md btn-success" type="submit" style="margin-left: 50%;">Añadir Habitación</button>
-                    </div>
-                </form>
+            <div class="mb-3 row">
+                <label for="inputHouseName" class="col-sm-2 col-form-label">Nombre de la Propiedad</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputHouseName" name="housename" value="{{ housename }}" readonly>
+                </div>
             </div>
-        </div>
-    {% else %}
-        <div class="row justify-content-center">
-            <h3>¡Debes iniciar sesión para añadir una habitación!</h3>
-        </div>
-    {% endif %}
+
+            <div class="mb-3 row">
+                <label for="inputRoomNumber" class="col-sm-2 col-form-label">Número de Habitación</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="inputRoomNumber" name="roomnumber" required>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="selectCapacity" class="col-sm-2 col-form-label">Capacidad Máxima</label>
+                <div class="col-sm-10">
+                    <select class="form-select" id="selectCapacity" name="maxcapacity" required>
+                        <option selected disabled>Capacidad</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="inputDescription" class="col-sm-2 col-form-label">Descripción</label>
+                <div class="col-sm-10">
+                    <textarea class="form-control" id="inputDescription" name="description" rows="3" required></textarea>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="inputPrice" class="col-sm-2 col-form-label">Precio (En pesos chilenos)</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="inputPrice" name="roomprice" required>
+                </div>
+            </div>
+
+            <div class="mb-3 row">
+                <label for="inputRoomPhoto" class="col-sm-2 col-form-label">Foto de la Habitación:</label>
+                <div class="col-sm-10">
+                    <input type="file" class="form-control" id="inputRoomPhoto" name="uploadroom1" accept="image/*" required>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <button type="submit" class="btn btn-primary">Añadir Habitación</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% else %}
+<div class="row justify-content-center">
+    <h3>¡Debes iniciar sesión para añadir una habitación!</h3>
+</div>
+{% endif %}
 {% endblock content %}

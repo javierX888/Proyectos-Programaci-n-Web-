@@ -17,22 +17,18 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from dotenv import load_dotenv
 from pathlib import Path
-import oracledb
+
 
 # Carga las variables de entorno desde el archivo .env
 load_dotenv()
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Obtener las variables de entorno
 SECRET_KEY = os.getenv('SECRET_KEY', 'your-default-secret-key')
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]', '0.0.0.0']
-
-# Inicialización del cliente de Oracle para habilitar el modo Thick
-oracledb.init_oracle_client(lib_dir=os.environ.get("lib_dir"))
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 
 # Application definition
@@ -87,13 +83,14 @@ WSGI_APPLICATION = 'rentastay.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'ORCLCDB',
-        'USER': 'rentastay',
-        'PASSWORD': '123456',
-        'HOST': 'oracledb19c_new',
-        'PORT': '1521',
+        'NAME': os.getenv('ORACLE_SID'),
+        'USER': os.getenv('ORACLE_USER'),
+        'PASSWORD': os.getenv('ORACLE_PASSWORD'),
+        'HOST': os.getenv('ORACLE_HOST'),
+        'PORT': os.getenv('ORACLE_PORT'),
     }
 }
+
 
 # Verificación de la configuración
 for key, value in DATABASES['default'].items():

@@ -1,55 +1,46 @@
-version: '4'
+version: '3.8'
+
 services:
+  oracledb19c_new:
+    image: doctorkirk/oracle-19c
+    container_name: oracledb19c_new
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+    environment:
+      - ORACLE_SID=ORCLCDB
+      - ORACLE_PDB=ORCLPDB1
+      - ORACLE_PWD=Password123
+      - ORACLE_CHARACTERSET=AL32UTF8
+    ports:
+      - 1521:1521
+      - 5500:5500
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep pmon"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   web:
     build:
-      context: ..
-      dockerfile: Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ..:/app
+      context: .
+      dockerfile: .devcontainer/Dockerfile
+    container_name: web
     ports:
-      - "8000:8000"
-    environment:
-      - ORACLE_HOST=oracledatabase19c
-      - ORACLE_PORT=1521 # Este es el puerto dentro del contenedor de Oracle
-      - ORACLE_SID=ORCLCDB
-      - ORACLE_USER=system
-      - ORACLE_PASSWORD=12345
-      # - ORACLE_PDB: ORCLPDB1
-      # - ORACLE_CHARACTERSET: AL32UTF8
-      # - ORACLE_NCHARACTERSET: AL16UTF16
-      # - ORACLE_EDITION: enterprise
-    networks:
-      - renta_javier_network
+      - 8080:8000
     depends_on:
-      - oracledatabase19c
-    network_mode: "container:oracledatabase19c"
-
-  oracledatabase19c:
-    image: doctorkirk/oracle-19c
-    ports:
-      - "1522:1521"
-      - "5500:5500"
+      oracledb19c_new:
+        condition: service_healthy
+    command: >
+      /wait-for-oracle.sh oracledb19c_new 1521 ORCLCDB rentastay 123456 &&
+      python manage.py runserver 0.0.0.0:8000
     volumes:
-      - C:\oracle-19c\oradata:/opt/oracle/oradata
-    networks:
-      - renta_javier_network
-    healthcheck:
-      test: ["CMD", "healthcheck.sh"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - .:/app
+    environment:
+      - ORACLE_HOST=oracledb19c_new
+      - ORACLE_PORT=1521
+      - ORACLE_SID=ORCLCDB
+      - ORACLE_USER=rentastay
+      - ORACLE_PASSWORD=123456
 
-networks:
-  renta_javier_network:
-    name: renta_javier_network
-    external: false
-
-
-      
-
-
-
-
-
-
+volumes:
+  oracle-data:

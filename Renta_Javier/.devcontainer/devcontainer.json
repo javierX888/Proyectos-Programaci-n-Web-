@@ -3,13 +3,11 @@
   "dockerFile": "Dockerfile",
   "context": "..",
   "runArgs": ["--init"],
-  // "image": "mcr.microsoft.com/devcontainers/python:3.10",
   "dockerComposeFile": "docker-compose.yml",
   "service": "web",
   "workspaceFolder": "/app",
-  "networkName": "renta_javier_network",
-  "forwardPorts": [8000],
-  "runServices": ["web", "oracledatabase19c"],
+  "forwardPorts": [8000, 1521],
+  "runServices": ["web", "oracledb19c_new"],
   "appPort": [
     "8000:8000"
   ],
@@ -26,6 +24,5 @@
   ],
   "postCreateCommand": "pip install -r requirements.txt",
   "remoteUser": "vscode",
-  "shutdownAction": "stopCompose",
-  "postStartCommand": "docker network connect renta_javier_network ${localEnv:COMPOSE_PROJECT_NAME}-web-1 || true"
+  "shutdownAction": "stopCompose"
 }

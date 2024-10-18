@@ -35,7 +35,7 @@ Asegúrese de tener instalado:
 
 2. Navegue al directorio del proyecto
    ```sh
-   cd RentaStay-Chile
+   cd Rentas-Chile
    ```
 
 3. Cree un archivo .env en la raíz del proyecto y configure las variables de entorno necesarias
